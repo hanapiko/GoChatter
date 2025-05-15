@@ -50,7 +50,15 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func homePage(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(`
+		<h1>Welcome to GoChatter!</h1>
+		<p>Connect via WebSocket at <code>ws://localhost:8080/ws</code></p>
+	`))
+}
+
 func main() {
+	http.HandleFunc("/", homePage)
 	http.HandleFunc("/ws", handleWebSocket)
 	http.ListenAndServe(":8080", nil)
 }
