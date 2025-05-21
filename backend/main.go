@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"sync"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -16,8 +18,11 @@ var mutex = sync.Mutex{}
 func broadcast(msg []byte) {
 	mutex.Lock()
 	defer mutex.Unlock()
+	timestamp := time.Now().Format("15:04:05")
+	formattedMsg := fmt.Sprintf("[%s] %s", timestamp, msg)
+
 	for client := range clients {
-		client.WriteMessage(websocket.TextMessage, msg)
+		client.WriteMessage(websocket.TextMessage, []byte(formattedMsg))
 	}
 }
 
